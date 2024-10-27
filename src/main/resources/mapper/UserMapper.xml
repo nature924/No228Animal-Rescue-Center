@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.UserDao">
+
+    <select id="findUser" parameterType="com.rescue.entity.User" resultType="com.rescue.entity.User">
+        select * from user where 1 = 1
+
+        <if test="user.realname != null and user.realname != '' ">
+            <bind name="realname" value="'%' + user.realname + '%'"/>
+            and realname like #{realname}
+        </if>
+
+        <if test="user.id != null and user.id != '' ">
+            and id = #{user.id}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectUserByPhone" parameterType="java.lang.String" resultType="com.rescue.entity.User">
+        select * from user where phone = #{phone}
+    </select>
+
+    <select id="getUserById" parameterType="java.lang.Integer" resultType="com.rescue.entity.User">
+        select * from user where id=#{id}
+    </select>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+	    delete from user
+	    where id = #{id}
+	  </delete>
+
+
+    <update id="updateUser" parameterType="com.rescue.entity.User" >
+      update user set
+        realname = #{user.realname},
+        nickname = #{user.nickname},
+        phone = #{user.phone},
+        tx = #{user.tx},
+        pwd = #{user.pwd},
+        sex = #{user.sex},
+        address = #{user.address}
+        where id = #{user.id}
+     </update>
+
+    <update id="updateUserPass" parameterType="com.rescue.entity.User" >
+      update user set
+        pwd = #{user.pwd}
+        where id = #{user.id}
+     </update>
+
+    <update id="updateUserTx" parameterType="com.rescue.entity.User" >
+      update user set
+        tx = #{user.tx}
+        where id = #{user.id}
+     </update>
+
+    <insert id="addUser" parameterType="com.rescue.entity.User" >
+      insert into user (realname,nickname,phone,tx,pwd,sex,address,registe_time) values
+      (#{user.realname},#{user.nickname},#{user.phone},#{user.tx},#{user.pwd},#{user.sex},#{user.address},#{user.registe_time})
+
+     </insert>
+
+</mapper>

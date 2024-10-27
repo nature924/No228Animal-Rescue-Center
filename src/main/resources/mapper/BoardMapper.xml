@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.BoardDao">
+
+    <select id="findBoard" parameterType="com.rescue.entity.Board" resultType="com.rescue.entity.Board">
+        select * from board where 1 = 1
+
+        <if test="board.title != null and board.title != '' ">
+            <bind name="name" value="'%' + board.title + '%'"/>
+            and title like #{name}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectAll" parameterType="java.lang.String" resultType="com.rescue.entity.Board">
+        select * from board where 1 = 1
+        <if test="map.uid != null and map.uid != '' ">
+            and uid = #{map.uid}
+        </if>
+    </select>
+
+    <select id="getBoardById" parameterType="java.lang.Integer" resultType="com.rescue.entity.Board">
+        select * from board where id=#{id}
+    </select>
+
+    <delete id="deleteBoard" parameterType="java.lang.Integer">
+	    delete from board
+	    where id = #{id}
+	  </delete>
+
+    <update id="updateBoard" parameterType="com.rescue.entity.Board" >
+      update board set
+        title = #{board.title},
+        content = #{board.content},
+        photo = #{board.photo},
+        editor = #{board.editor}
+        where id = #{board.id}
+     </update>
+
+    <insert id="addBoard" parameterType="com.rescue.entity.Board" >
+      insert into board (title,content,editor,times,photo,uid) values
+      (#{board.title},#{board.content},#{board.editor},#{board.times},#{board.photo},#{board.uid})
+     </insert>
+
+</mapper>

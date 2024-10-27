@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.AnimalDao">
+
+    <select id="findAnimal" parameterType="com.rescue.entity.Animal" resultType="com.rescue.entity.Animal">
+        select * from animal where 1 = 1
+
+        <if test="animal.name != null and animal.name != '' ">
+            <bind name="name" value="'%' + animal.name + '%'"/>
+            and name like #{name}
+        </if>
+
+
+        <if test="animal.c_id != null and animal.c_id != '' ">
+            and c_id = #{animal.c_id}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectAll" parameterType="java.lang.String" resultType="com.rescue.entity.Animal">
+        select * from animal
+    </select>
+
+    <select id="selectAnimalStatics"  resultType="com.rescue.entity.Statics">
+         select create_date as names ,count(1) as counts from animal GROUP BY names
+    </select>
+
+    <select id="selectAnimalStaticsByCate"  resultType="com.rescue.entity.Statics">
+         select c.cname as names ,count(1) as counts from animal a left join  category c on a.c_id = c.id GROUP BY names
+    </select>
+
+    <select id="getAnimalById" parameterType="java.lang.Integer" resultType="com.rescue.entity.Animal">
+        select * from animal where id=#{id}
+    </select>
+
+    <delete id="deleteAnimal" parameterType="java.lang.Integer">
+	    delete from animal
+	    where id = #{id}
+	  </delete>
+
+    <update id="updateAnimal" parameterType="com.rescue.entity.Animal" >
+      update animal set
+        c_id = #{animal.c_id},
+        name = #{animal.name},
+        note = #{animal.note},
+        yzr = #{animal.yzr},
+        phone = #{animal.phone},
+        detail = #{animal.detail},
+        photo = #{animal.photo}
+        where id = #{animal.id}
+     </update>
+
+    <update id="updateState" parameterType="com.rescue.entity.Animal" >
+      update animal set
+        status = #{animal.status}
+        where id = #{animal.id}
+     </update>
+
+    <insert id="addAnimal" parameterType="com.rescue.entity.Animal" >
+      insert into animal (c_id,name,photo,note,yzr,phone,detail,create_date) values
+      (#{animal.c_id},
+      #{animal.name},
+      #{animal.photo},
+      #{animal.note},
+      #{animal.yzr},
+      #{animal.phone},
+      #{animal.detail},
+      #{animal.create_date}
+      )
+     </insert>
+
+</mapper>

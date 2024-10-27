@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.CommentsDao">
+
+    <select id="findComments" parameterType="com.rescue.entity.Comments" resultType="com.rescue.entity.Comments">
+        select * from comments where 1 = 1
+
+        <if test="comments.detail != null and comments.detail != '' ">
+            <bind name="detail" value="'%' + comments.detail + '%'"/>
+            and detail like #{detail}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectAll" parameterType="java.lang.String" resultType="com.rescue.entity.Comments">
+        select * from comments where  1 = 1
+
+        <if test="data.uid != null and data.uid != '' ">
+            and uid = #{data.uid}
+        </if>
+
+        <if test="data.bid != null and data.bid != '' ">
+            and bid = #{data.bid}
+        </if>
+
+
+    </select>
+
+    <select id="getCommentsById" parameterType="java.lang.Integer" resultType="com.rescue.entity.Comments">
+        select * from comments where id=#{id}
+    </select>
+
+    <delete id="deleteComments" parameterType="java.lang.Integer">
+	    delete from comments
+	    where id = #{id}
+	  </delete>
+
+    <update id="updateComments" parameterType="com.rescue.entity.Comments" >
+      update comments set
+        detail = #{comments.detail}
+        where id = #{comments.id}
+     </update>
+
+    <insert id="addComments" parameterType="com.rescue.entity.Comments" >
+      insert into comments (bid,detail,uid,create_time) values
+      (#{comments.bid},#{comments.detail},#{comments.uid},#{comments.create_time})
+     </insert>
+
+</mapper>

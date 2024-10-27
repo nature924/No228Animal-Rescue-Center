@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.NotifyDao">
+
+    <select id="findNotify" parameterType="com.rescue.entity.Notify" resultType="com.rescue.entity.Notify">
+        select * from notify where 1 = 1
+
+        <if test="notify.title != null and notify.title != '' ">
+            <bind name="name" value="'%' + notify.title + '%'"/>
+            and title like #{name}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectAll" parameterType="java.lang.String" resultType="com.rescue.entity.Notify">
+        select * from notify where 1 = 1
+    </select>
+
+    <select id="getNotifyById" parameterType="java.lang.Integer" resultType="com.rescue.entity.Notify">
+        select * from notify where id=#{id}
+    </select>
+
+    <delete id="deleteNotify" parameterType="java.lang.Integer">
+	    delete from notify
+	    where id = #{id}
+	  </delete>
+
+    <update id="updateNotify" parameterType="com.rescue.entity.Notify" >
+      update notify set
+        title = #{notify.title},
+        content = #{notify.content},
+        editor = #{notify.editor}
+        where id = #{notify.id}
+     </update>
+
+    <insert id="addNotify" parameterType="com.rescue.entity.Notify" >
+      insert into notify (title,content,editor,create_time) values
+      (#{notify.title},#{notify.content},#{notify.editor},#{notify.create_time})
+     </insert>
+
+</mapper>

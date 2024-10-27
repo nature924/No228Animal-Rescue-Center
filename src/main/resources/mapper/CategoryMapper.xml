@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.CategoryDao">
+
+    <select id="findCategory" parameterType="com.rescue.entity.Category" resultType="com.rescue.entity.Category">
+        select * from category where 1 = 1
+
+        <if test="category.cname != null and category.cname != '' ">
+            <bind name="cname" value="'%' + category.cname + '%'"/>
+            and cname like #{cname}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectAll" resultType="com.rescue.entity.Category">
+        select * from category
+    </select>
+
+    <select id="getCategoryById" parameterType="java.lang.Integer" resultType="com.rescue.entity.Category">
+        select * from category where id=#{id}
+    </select>
+
+    <delete id="deleteCategory" parameterType="java.lang.Integer">
+	    delete from category
+	    where id = #{id}
+	  </delete>
+
+    <update id="updateCategory" parameterType="com.rescue.entity.Category" >
+      update category set
+        cname = #{category.cname},
+        note = #{category.note}
+        where id = #{category.id}
+     </update>
+
+    <insert id="addCategory" parameterType="com.rescue.entity.Category" >
+      insert into category (cname,note) values
+      (#{category.cname},#{category.note})
+     </insert>
+
+</mapper>

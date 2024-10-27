@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.dao.DonateDao">
+
+    <select id="findDonate" parameterType="com.rescue.entity.Donate" resultType="com.rescue.entity.Donate">
+        select * from donate where 1 = 1
+
+        <if test="donate.price != null and donate.price != '' ">
+            <bind name="price" value="'%' + donate.price + '%'"/>
+            and price like #{price}
+        </if>
+
+        order by id asc
+    </select>
+
+    <select id="selectAll" parameterType="java.lang.String" resultType="com.rescue.entity.Donate">
+        select * from donate where 1 = 1
+        <if test="map.uid != null and map.uid != '' ">
+            and uid = #{map.uid}
+        </if>
+    </select>
+
+    <select id="selectDonatesStatics"  resultType="com.rescue.entity.Statics">
+             select SUM(price) as counts ,a.name as names from donate d left join animal a on d.aid = a.id GROUP BY names
+ </select>
+
+
+
+
+    <select id="getDonateById" parameterType="java.lang.Integer" resultType="com.rescue.entity.Donate">
+        select * from donate where id=#{id}
+    </select>
+
+    <delete id="deleteDonate" parameterType="java.lang.Integer">
+	    delete from donate
+	    where id = #{id}
+	  </delete>
+
+    <update id="updateDonate" parameterType="com.rescue.entity.Donate" >
+      update donate set
+        price = #{donate.price},
+        payway = #{donate.payway},
+        note = #{donate.note}
+        where id = #{donate.id}
+     </update>
+
+    <update id="updateDonateState" parameterType="com.rescue.entity.Donate" >
+      update donate set
+        state = #{donate.state}
+        where id = #{donate.id}
+     </update>
+
+    <insert id="addDonate" parameterType="com.rescue.entity.Donate" >
+      insert into donate (aid,price,uid,payway,note,create_time) values
+      (#{donate.aid},#{donate.price},#{donate.uid},#{donate.payway},#{donate.note},#{donate.create_time})
+     </insert>
+
+
+</mapper>
